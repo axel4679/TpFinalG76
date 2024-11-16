@@ -1,4 +1,4 @@
-package ar.edu.unju.escmi.entities.dao.imp;
+package ar.edu.unju.escmi.dao.imp;
 
 import java.util.List;
 
@@ -6,18 +6,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import ar.edu.unju.escmi.conf.EmfSingleton;
-import ar.edu.unju.escmi.entities.Salon;
-import ar.edu.unju.escmi.entities.dao.SalonDAO;
+import ar.edu.unju.escmi.dao.IReservaDao;
+import ar.edu.unju.escmi.entities.Reserva;
 
-public class SalonDAOImp implements SalonDAO {
+public class ReservaDaoImp implements IReservaDao {
 	private static EntityManager manager = EmfSingleton.getInstance().getEmf().createEntityManager();
 
 	@Override
-	public void guardarSalon(Salon salon) {
-		// TODO Auto-generated method stub
+	public void realizarReserva(Reserva reserva) {
 		try {
 			manager.getTransaction().begin();
-			manager.persist(salon);
+			manager.persist(reserva);
 			manager.getTransaction().commit();
 		} catch (Exception e) {
 			if (manager.getTransaction() != null) {
@@ -27,18 +26,13 @@ public class SalonDAOImp implements SalonDAO {
 		} finally {
 			// manager.close();
 		}
-
 	}
-	
+
 	@Override
-	public List<Salon> consultarSalon() {
-		// TODO Auto-generated method stub
-		TypedQuery<Salon> query = manager.createQuery("Select l from Salon l", Salon.class);
-		List<Salon> Salones = query.getResultList();
-		return Salones;
-
+	public List<Reserva> consultarReservas() {
+		TypedQuery<Reserva> query = manager.createQuery("Select l from Reserva l", Reserva.class);
+		List<Reserva> reservas = query.getResultList();
+		return reservas;
 	}
-
-
 
 }

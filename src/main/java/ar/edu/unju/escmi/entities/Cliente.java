@@ -1,35 +1,37 @@
 package ar.edu.unju.escmi.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 @Entity
+@Table(name = "Clientes")
 public class Cliente {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
 	@Column(nullable = false, unique = true, length = 20)
 	private String dni;
-
 	@Column(nullable = false, length = 50)
 	private String nombre;
-
 	@Column(nullable = false, length = 50)
 	private String apellido;
-
 	@Column(length = 100)
 	private String domicilio;
-
 	@Column(length = 15)
 	private String telefono;
-
 	@Column(nullable = false)
 	private boolean estado;
-	
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+	private List<Reserva> reservas;
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}
@@ -101,14 +103,13 @@ public class Cliente {
 	}
 
 	public void mostrarDato() {
-		System.out.println("Id: "+ this.id);
-		System.out.println("Nombre: "+ this.nombre);
-		System.out.println("Apellido: "+ this.apellido);
-		System.out.println("DNI: "+ this.dni);
-		System.out.println("Domicilio: "+ this.domicilio);
-		System.out.println("Tel: "+ this.telefono);
+		System.out.println("Id: " + this.id);
+		System.out.println("Nombre: " + this.nombre);
+		System.out.println("Apellido: " + this.apellido);
+		System.out.println("DNI: " + this.dni);
+		System.out.println("Domicilio: " + this.domicilio);
+		System.out.println("Teléfono: " + this.telefono);
+		System.out.println("Estado: " + (this.estado ? "Activo" : "Inactivo"));
 	}
-	
-	
 
 }

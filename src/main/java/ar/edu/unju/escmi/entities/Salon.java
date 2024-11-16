@@ -1,10 +1,18 @@
 package ar.edu.unju.escmi.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "Salones")
 public class Salon {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,11 +20,13 @@ public class Salon {
 	@Column(nullable = false, length = 50)
 	private String nombre;
 	@Column(length = 3)
-	private  int capacidad;
+	private int capacidad;
 	@Column(nullable = false)
 	private boolean pileta;
 	@Column(nullable = false)
 	private double precio;
+	@OneToMany(mappedBy = "salon", cascade = CascadeType.ALL)
+	private List<Reserva> reservas;
 
 	public Salon() {
 		// TODO Auto-generated constructor stub
@@ -71,21 +81,13 @@ public class Salon {
 	}
 
 	public void mostrarDatos() {
-		
-		System.out.println("Id: "+ this.id);
-		System.out.println("Nombre: "+ this.nombre);
-		System.out.println("Capacidad: "+ this.capacidad);
-		if(isPileta()){
-			System.out.println("Pileta: SI");
-		}
-		else {
-			System.out.println("Pileta: NO");
-		}
-		System.out.println("Precio: "+ this.precio);
 
-}
-	
-	
-	
-	
+		System.out.println("Id: " + this.id);
+		System.out.println("Nombre: " + this.nombre);
+		System.out.println("Capacidad: " + this.capacidad);
+		System.out.println("Con pileta: " + (this.pileta ? "SI" : "NO"));
+		System.out.println("Precio: " + this.precio);
+
+	}
+
 }
