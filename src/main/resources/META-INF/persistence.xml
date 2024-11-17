@@ -19,8 +19,8 @@
 			<property name="javax.persistence.jdbc.password" value="3885030264Gonza" />
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.MySQL8Dialect" />
-			<!-- <property name="hibernate.hbm2ddl.auto" value="create-drop"/> -->
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			 <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+			<!--<property name="hibernate.hbm2ddl.auto" value="update" />-->
 			<!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
 			<property name="hibernate.show_sql" value="true" />
 		</properties>

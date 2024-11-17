@@ -7,7 +7,9 @@ import ar.edu.unju.escmi.dao.imp.ServicioAdicionalDaoImp;
 import ar.edu.unju.escmi.entities.Cliente;
 import ar.edu.unju.escmi.entities.Reserva;
 import ar.edu.unju.escmi.entities.Salon;
+import ar.edu.unju.escmi.entities.ServiciosAdicionales;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -20,12 +22,7 @@ public class Main {
 	
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Salon salon = new Salon("Salón Cosmos",60,false,60000.00);
-        salonDao.guardarSalon(salon);
-        Salon salon1 = new Salon("Salón Esmeralda",20,false,40000.00);
-        salonDao.guardarSalon(salon1);
-        Salon salon2 = new Salon("Salón Galaxy",100,true,60000.00);
-        salonDao.guardarSalon(salon2);
+        
         
         while (true) {
             System.out.println("╔═════════════════════════════════════════╗");
@@ -84,6 +81,43 @@ public class Main {
         }
         
     }
+    
+    public static void precargaDatos() {
+    	List<Salon> salones = new ArrayList<>(); 
+    	List<Cliente> clientes = new ArrayList<>();
+    	List<ServiciosAdicionales> servicios = new ArrayList<>();
+    	salones.add(new Salon("Salón Cosmos", 60, false, 60000.00));
+    	salones.add(new Salon("Salón Esmeralda", 20, false, 40000.00)); 
+    	salones.add(new Salon("Salón Galaxy", 100, true, 60000.00)); 
+    
+    	for (Salon salon : salones) {
+    		salonDao.guardarSalon(salon); 
+    		}
+
+        clientes.add(new Cliente("12345678", "Juan", "Pérez", "Calle Falsa 123", "555-1234", true));
+        clientes.add(new Cliente("23456789", "María", "Gómez", "Avenida Siempre Viva 742", "555-5678", true));
+        clientes.add(new Cliente("34567890", "Carlos", "Martínez", "Pasaje Sin Nombre 456", "555-9012", true));
+        clientes.add(new Cliente("45678901", "Ana", "Rodríguez", "Boulevard Perdido 789", "555-3456", true));
+        clientes.add(new Cliente("56789012", "Pedro", "López", "Ruta Inventada 321", "555-7890", true));
+        clientes.add(new Cliente("67890123", "Laura", "Hernández", "Callejuela Olvidada 654", "555-4321", true));
+        clientes.add(new Cliente("78901234", "Diego", "Fernández", "Camino Desconocido 987", "555-2109", true));
+        clientes.add(new Cliente("89012345", "Elena", "García", "Calle Sin Salida 123", "555-6543", true));
+        clientes.add(new Cliente("90123456", "Sofía", "Sánchez", "Avenida Infinita 456", "555-8765", true));
+        clientes.add(new Cliente("01234567", "Luis", "Ramos", "Boulevard Circular 789", "555-0987", true));
+        for (Cliente cliente : clientes) { 
+        	clienteDao.altaCliente(cliente); 
+        	}
+        servicios.add(new ServiciosAdicionales("Cámara 360", 1500.00, true));
+        servicios.add(new ServiciosAdicionales("Cabina de fotos", 2000.00, true));
+        servicios.add(new ServiciosAdicionales("Filmación", 3000.00, true));
+        servicios.add(new ServiciosAdicionales("Pintacaritas", 500.00, true));
+        
+        for (ServiciosAdicionales servicio : servicios) {
+        	servAddDao.guardarServicioAdicional(servicio); 
+        	}
+        
+        
+    }
 
     // Funciones de ejemplo (puedes definir cada una según tus necesidades)
     public static void altaCliente() {
@@ -103,7 +137,7 @@ public class Main {
     	clienteDao.altaCliente(cliente);
     	
     	System.out.println("Cliente guardado: " );
-    	cliente.mostrarDato();
+    	cliente.mostrarDatos();
    
     	
     }
@@ -115,7 +149,7 @@ public class Main {
     	System.out.print("Ingrese el ID del cliente a consultar: ");
     	long clienteId = scanner.nextLong();
     	Cliente cliente= clienteDao.consultarClienteId(clienteId);
-    	cliente.mostrarDato();
+    	cliente.mostrarDatos();
     	}
 
     public static void modificarCliente() {

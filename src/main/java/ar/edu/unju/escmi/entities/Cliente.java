@@ -39,7 +39,7 @@ public class Cliente {
 	public Cliente(String dni, String nombre, String apellido, String domicilio, String telefono, boolean estado) {
 		super();
 		this.dni = dni;
-		this.nombre = nombre;
+		this.nombre = nombre;	
 		this.apellido = apellido;
 		this.domicilio = domicilio;
 		this.telefono = telefono;
@@ -102,7 +102,7 @@ public class Cliente {
 		this.estado = estado;
 	}
 
-	public void mostrarDato() {
+	public void mostrarDatos() {
 		System.out.println("Id: " + this.id);
 		System.out.println("Nombre: " + this.nombre);
 		System.out.println("Apellido: " + this.apellido);
