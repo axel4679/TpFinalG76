@@ -17,7 +17,7 @@ public class Salon {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 50,unique = true)
 	private String nombre;
 	@Column(length = 3)
 	private int capacidad;

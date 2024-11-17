@@ -14,6 +14,7 @@ public class SalonDaoImp implements ISalonDao {
 
 	@Override
 	public void guardarSalon(Salon salon) {
+		
 		try {
 			manager.getTransaction().begin();
 			manager.persist(salon);

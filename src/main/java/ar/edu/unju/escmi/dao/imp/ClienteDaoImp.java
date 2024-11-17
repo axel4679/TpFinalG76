@@ -16,13 +16,14 @@ public class ClienteDaoImp implements IClienteDao {
 			manager.getTransaction().begin();
 			manager.persist(cliente);
 			manager.getTransaction().commit();
+			
 		}catch(Exception e) {
 			if(manager.getTransaction() != null) {
 				manager.getTransaction().rollback();
 			}
 			System.out.println("No se pudo guardar el objeto cliente");
 		}finally {
-			//manager.close();
+			manager.close();
 		}
 
 	}
@@ -43,6 +44,10 @@ public class ClienteDaoImp implements IClienteDao {
 			}
 			
 		}
+	@Override
+	public Cliente obtenerClienteId(Long idcliente) {
+		return manager.find(Cliente.class, idcliente);
+	}
 
 	@Override
 	public Cliente consultarClienteId(Long idcliente) {
