@@ -1,5 +1,5 @@
 package ar.edu.unju.escmi.entities;
-
+ 
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import ar.edu.unju.escmi.dao.imp.SalonDaoImp;
 
 @Entity
 @Table(name = "Salones")
@@ -89,5 +91,5 @@ public class Salon {
 		System.out.println("Precio: " + this.precio);
 
 	}
-
+	
 }

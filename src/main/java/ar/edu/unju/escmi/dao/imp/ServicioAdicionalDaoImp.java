@@ -1,5 +1,5 @@
 package ar.edu.unju.escmi.dao.imp;
-
+ 
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -31,9 +31,14 @@ public class ServicioAdicionalDaoImp implements IServicioAdicionalDao {
 
 	@Override
 	public List<ServiciosAdicionales> consultarServicioAdicional() {
-		TypedQuery<ServiciosAdicionales> query = manager.createQuery("Select l from ServicioAdicional l", ServiciosAdicionales.class);
+		TypedQuery<ServiciosAdicionales> query = manager.createQuery("Select l from ServiciosAdicionales l", ServiciosAdicionales.class);
 		List<ServiciosAdicionales> serviciosAdicionales = query.getResultList();
 		return serviciosAdicionales;
+	}
+
+	@Override
+	public ServiciosAdicionales consultarServicioAdicionalId(Long idcliente) {
+		return manager.find(ServiciosAdicionales.class, idcliente);
 	}
 
 }

@@ -1,5 +1,5 @@
 package ar.edu.unju.escmi.entities;
-
+ 
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -39,7 +39,7 @@ public class Cliente {
 	public Cliente(String dni, String nombre, String apellido, String domicilio, String telefono, boolean estado) {
 		super();
 		this.dni = dni;
-		this.nombre = nombre;	
+		this.nombre = nombre;
 		this.apellido = apellido;
 		this.domicilio = domicilio;
 		this.telefono = telefono;

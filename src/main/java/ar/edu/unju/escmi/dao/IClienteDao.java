@@ -1,7 +1,9 @@
 package ar.edu.unju.escmi.dao;
 
-import ar.edu.unju.escmi.entities.Cliente;
+import java.util.List;
 
+import ar.edu.unju.escmi.entities.Cliente;
+ 
 public interface IClienteDao {
 
 	public void altaCliente(Cliente cliente);
@@ -9,6 +11,7 @@ public interface IClienteDao {
 	public void modificarCliente(Cliente cliente);
 	
 	public Cliente obtenerClienteId(Long idcliente);
+	
+	public List<Cliente> consultarClientes();
 
-	public Cliente consultarClienteId(Long idcliente);
 }

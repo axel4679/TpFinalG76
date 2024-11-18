@@ -1,5 +1,5 @@
 package ar.edu.unju.escmi.dao.imp;
-
+ 
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -33,6 +33,11 @@ public class ReservaDaoImp implements IReservaDao {
 		TypedQuery<Reserva> query = manager.createQuery("Select l from Reserva l", Reserva.class);
 		List<Reserva> reservas = query.getResultList();
 		return reservas;
+	}
+
+	@Override
+	public Reserva consultarReservaId(Long idcliente) {
+		return manager.find(Reserva.class, idcliente);
 	}
 
 }

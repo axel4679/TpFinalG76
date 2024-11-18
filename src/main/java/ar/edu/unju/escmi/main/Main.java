@@ -9,6 +9,9 @@ import ar.edu.unju.escmi.entities.Reserva;
 import ar.edu.unju.escmi.entities.Salon;
 import ar.edu.unju.escmi.entities.ServiciosAdicionales;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -17,251 +20,387 @@ import java.util.Scanner;
 public class Main {
 	public static ClienteDaoImp clienteDao = new ClienteDaoImp();
 	public static ReservaDaoImp reservaDao = new ReservaDaoImp();
-	public static SalonDaoImp salonDao= new SalonDaoImp();
+	public static SalonDaoImp salonDao = new SalonDaoImp();
 	public static ServicioAdicionalDaoImp servAddDao = new ServicioAdicionalDaoImp();
-	
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        
-        while (true) {
-            System.out.println("╔═════════════════════════════════════════╗");
-            System.out.println("║        MENÚ DE OPCIONES  	 	  ║");
-            System.out.println("╠═════════════════════════════════════════╣");
-            System.out.println("║ 1. Alta de cliente             	  ║");
-            System.out.println("║ 2. Consultar Clientes                   ║");
-            System.out.println("║ 3. Modificar Cliente       		  ║");
-            System.out.println("║ 4. Realizar pago              	  ║");
-            System.out.println("║ 5. Realizar reserva           	  ║");//map
-            System.out.println("║ 6. Consultar todas las Reservas         ║");
-            System.out.println("║ 7. Consultar una reserva                ║");
-            System.out.println("║ 8. Consultar Salones                    ║");
-            System.out.println("║ 9. Consultar Servicios adicionales      ║");
-            System.out.println("║ 0. Salir                                ║");
-            System.out.println("╚═════════════════════════════════════════╝");
-            System.out.print("Selecciona una opción: ");
+	public static Scanner scanner = new Scanner(System.in);
 
-            String option = scanner.nextLine();
-
-            switch (option) {
-                case "1":
-                    altaCliente();
-                    break;
-                case "2":
-                    consultarClientes();
-                    break;
-                case "3":
-                    modificarCliente();
-                    break;
-                case "4":
-                    realizarPago();
-                    break;
-                case "5":
-                    realizarReserva();
-                    break;
-                case "6":
-                    consultarTodasLasReservas();
-                    break;
-                case "7":
-                    consultarUnaReserva();
-                    break;
-                case "8":
-                    consultarSalones();
-                    break;
-                case "9":
-                    consultarServiciosAdicionales();
-                    break;
-                case "0":
-                    System.out.println("Saliendo del programa...");
-                    return;
-                default:
-                    System.out.println("Opción no válida, por favor intenta de nuevo.");
-            }
-          
-        }
-        
-    }
-    
-    public static void precargaDatos() {
-    	List<Salon> salones = new ArrayList<>(); 
-    	List<Cliente> clientes = new ArrayList<>();
-    	List<ServiciosAdicionales> servicios = new ArrayList<>();
-    	salones.add(new Salon("Salón Cosmos", 60, false, 60000.00));
-    	salones.add(new Salon("Salón Esmeralda", 20, false, 40000.00)); 
-    	salones.add(new Salon("Salón Galaxy", 100, true, 60000.00)); 
-    
-    	for (Salon salon : salones) {
-    		salonDao.guardarSalon(salon); 
-    		}
-
-        clientes.add(new Cliente("12345678", "Juan", "Pérez", "Calle Falsa 123", "555-1234", true));
-        clientes.add(new Cliente("23456789", "María", "Gómez", "Avenida Siempre Viva 742", "555-5678", true));
-        clientes.add(new Cliente("34567890", "Carlos", "Martínez", "Pasaje Sin Nombre 456", "555-9012", true));
-        clientes.add(new Cliente("45678901", "Ana", "Rodríguez", "Boulevard Perdido 789", "555-3456", true));
-        clientes.add(new Cliente("56789012", "Pedro", "López", "Ruta Inventada 321", "555-7890", true));
-        clientes.add(new Cliente("67890123", "Laura", "Hernández", "Callejuela Olvidada 654", "555-4321", true));
-        clientes.add(new Cliente("78901234", "Diego", "Fernández", "Camino Desconocido 987", "555-2109", true));
-        clientes.add(new Cliente("89012345", "Elena", "García", "Calle Sin Salida 123", "555-6543", true));
-        clientes.add(new Cliente("90123456", "Sofía", "Sánchez", "Avenida Infinita 456", "555-8765", true));
-        clientes.add(new Cliente("01234567", "Luis", "Ramos", "Boulevard Circular 789", "555-0987", true));
-        for (Cliente cliente : clientes) { 
-        	clienteDao.altaCliente(cliente); 
-        	}
-        servicios.add(new ServiciosAdicionales("Cámara 360", 1500.00, true));
-        servicios.add(new ServiciosAdicionales("Cabina de fotos", 2000.00, true));
-        servicios.add(new ServiciosAdicionales("Filmación", 3000.00, true));
-        servicios.add(new ServiciosAdicionales("Pintacaritas", 500.00, true));
-        
-        for (ServiciosAdicionales servicio : servicios) {
-        	servAddDao.guardarServicioAdicional(servicio); 
-        	}
-        
-        
-    }
-
-    // Funciones de ejemplo (puedes definir cada una según tus necesidades)
-    public static void altaCliente() {
-    	Scanner scanner  = new Scanner(System.in);
-    	System.out.print("Ingrese el DNI: "); 
-    	String dni = scanner.nextLine();
-    	System.out.print("Ingrese el nombre: ");
-    	String nombre = scanner.nextLine();
-    	System.out.print("Ingrese el apellido: ");
-    	String apellido = scanner.nextLine();
-    	System.out.print("Ingrese el domicilio: ");
-    	String domicilio = scanner.nextLine();
-    	System.out.print("Ingrese el teléfono: ");
-    	String telefono = scanner.nextLine();
-    	
-    	Cliente cliente = new Cliente(dni, nombre, apellido, domicilio, telefono, true);
-    	clienteDao.altaCliente(cliente);
-    	
-    	System.out.println("Cliente guardado: " );
-    	cliente.mostrarDatos();
-   
-    	
-    }
-
-
-    public static void consultarClientes() {
-    	Scanner scanner  = new Scanner(System.in);
-    	System.out.println("Función de consulta de clientes");
-    	System.out.print("Ingrese el ID del cliente a consultar: ");
-    	long clienteId = scanner.nextLong();
-    	Cliente cliente= clienteDao.consultarClienteId(clienteId);
-    	cliente.mostrarDatos();
-    	}
-
-    public static void modificarCliente() {
-    	Scanner scanner  = new Scanner(System.in);
-    	long iid_cli = 0;
+	public static void main(String[] args) {
+		// precargaSalon();
+		// precargaServiciosAdicionales();
 		while (true) {
-			System.out.print("Ingrese el ID del cliente a modificar: ");
+			System.out.println("╔═════════════════════════════════════════╗");
+			System.out.println("║        MENÚ DE OPCIONES  	 	  ║");
+			System.out.println("╠═════════════════════════════════════════╣");
+			System.out.println("║ 1. Alta de cliente             	  ║");
+			System.out.println("║ 2. Consultar Clientes                   ║");
+			System.out.println("║ 3. Modificar Cliente       		  ║");
+			System.out.println("║ 4. Realizar pago              	  ║");
+			System.out.println("║ 5. Realizar reserva           	  ║");// map
+			System.out.println("║ 6. Consultar todas las Reservas         ║");
+			System.out.println("║ 7. Consultar una reserva                ║");
+			System.out.println("║ 8. Consultar Salones                    ║");
+			System.out.println("║ 9. Consultar Servicios adicionales      ║");
+			System.out.println("║ 0. Salir                                ║");
+			System.out.println("╚═════════════════════════════════════════╝");
+			System.out.print("Selecciona una opción: ");
+
+			switch (scanner.nextLine()) {
+			case "1":
+				Cliente clienteNuevo = new Cliente();
+				clienteNuevo = cargaCliente(clienteNuevo);
+				if (clienteNuevo != null) {
+					clienteDao.altaCliente(clienteNuevo);
+					System.out.println("Cliente guardado:");
+				} else {
+					System.out.println("Cliente NO guardado: ");
+				}
+				break;
+			case "2":
+				consultarClientes();
+				break;
+			case "3":
+				modificarCliente();
+				break;
+			case "4":
+				realizarPago();
+				break;
+			case "5":
+				realizarReserva();
+				break;
+			case "6":
+				consultarTodasLasReservas();
+				break;
+			case "7":
+				Reserva reserva = buscarUnaReserva();
+				if (reserva != null) {
+					reserva.mostrarDatos();
+				} else {
+					System.out.println("El cliente no existe");
+				}
+				break;
+			case "8":
+				consultarSalones();
+				break;
+			case "9":
+				consultarServiciosAdicionales();
+				break;
+			case "0":
+				System.out.println("Saliendo del programa...");
+				return;
+			default:
+				System.out.println("Opción no válida, por favor intenta de nuevo.");
+			}
+
+		}
+
+	}
+
+	public static Cliente cargaCliente(Cliente cliente) {
+		System.out.print("Ingrese el DNI: ");
+		cliente.setDni(scanner.nextLine());
+		System.out.print("Ingrese el nombre: ");
+		cliente.setNombre(scanner.nextLine());
+		System.out.print("Ingrese el apellido: ");
+		cliente.setApellido(scanner.nextLine());
+		System.out.print("Ingrese el domicilio: ");
+		cliente.setDomicilio(scanner.nextLine());
+		System.out.print("Ingrese el teléfono: ");
+		cliente.setTelefono(scanner.nextLine());
+		cliente.setEstado(true);
+		return cliente;
+
+	}
+
+	public static void modificarCliente() {
+		Cliente clienteMod = buscarUnCliente();
+		if (clienteMod != null) {
+			clienteMod = cargaCliente(clienteMod);
+			clienteDao.modificarCliente(clienteMod);
+			System.out.println("El cliente modificado");
+		} else {
+			System.out.println("El cliente no existe");
+		}
+	}
+
+	public static void realizarPago() {
+		System.out.println("Función de realizar pago");
+		Reserva reserva = buscarUnaReserva();
+		if (reserva == null) {
+			System.out.println("El reserva no existe");
+			return;
+		}
+
+		System.out.println("Detalles de la Reserva");
+		reserva.mostrarDatos();
+		double montoTotal = reserva.calcularMontoTotal();
+		double montoPendiente = reserva.calcularPagoPendiente();
+		System.out.println("Monto total: " + montoTotal);
+		System.out.println("Monto pendiente: " + montoPendiente);
+
+		if (montoPendiente == 0) {
+			System.out.println("¡La reserva ha sido completamente pagada!");
+			return;
+		}
+
+		while (true) {
 			try {
-				iid_cli = scanner.nextLong();
+				System.out.println("Ingrese el monto a pagar: ");
+				double pago = scanner.nextDouble();
+
+				if (pago <= 0) {
+					System.out.println("Error: El monto debe ser mayor a cero.");
+				} else if (pago > montoPendiente) {
+					System.out.printf("Error: El monto excede el pendiente ", montoPendiente);
+				} else {
+					reserva.setMonto_pagado(reserva.getMonto_pagado() + pago);
+
+					System.out.println("Pago realizado: " + pago);
+					System.out.println("Monto pendiente actualizado: " + reserva.calcularPagoPendiente());
+					reserva.setCancelado(reserva.calcularPagoPendiente() <= 0);
+					reservaDao.realizarReserva(reserva);
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("Error: Entrada inválida. Intente de nuevo.");
+			} finally {
 				scanner.nextLine();
+			}
+		}
+
+	}
+
+	public static void realizarReserva() {
+		System.out.println("Función de realizar reserva");
+		Reserva reserva = new Reserva();
+		Cliente cliente = buscarUnCliente();
+		if (cliente != null) {
+			System.out.println("Cliente Existe");
+		} else {
+			cliente = new Cliente();
+			System.out.println("Cliente N0 Existe");
+			System.out.println("Creando cliente");
+			clienteDao.altaCliente(cargaCliente(cliente));
+			System.out.println("Cliente Creado");
+		}
+		reserva.setCliente(cliente);
+
+		Long salonId;
+		while (true) {
+			try {
+				System.out.print("Ingrese ID del salón: ");
+				salonId = scanner.nextLong();
+				Salon salon = salonDao.obtenerSalonId(salonId);
+				if (salon != null) {
+					reserva.setSalon(salon);
+					break;
+				}
+				System.out.println("Salon no existe");
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un número entero para el ID del cliente.");
+			} finally {
+				scanner.nextLine();
+			}
+		}
+
+		while (true) {
+			try {
+				System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
+				reserva.setFecha(LocalDate.parse(scanner.nextLine()));
+				break;
+			} catch (DateTimeParseException e) {
+				System.out.println("Formato de fecha incorrecto. Intente de nuevo.");
+			}
+		}
+
+		while (true) {
+			try {
+				System.out.print("Ingrese la hora de inicio (HH:MM): ");
+				reserva.setHs_inicio(LocalTime.parse(scanner.nextLine()));
+				break;
+			} catch (DateTimeParseException e) {
+				System.out.println("Formato de hora incorrecto. Intente de nuevo.");
+			}
+		}
+
+		while (true) {
+			try {
+				System.out.print("Ingrese la hora de fin (HH:MM): ");
+				reserva.setHs_fin(LocalTime.parse(scanner.nextLine()));
+				break;
+			} catch (DateTimeParseException e) {
+				System.out.println("Formato de hora incorrecto. Intente de nuevo.");
+			}
+		}
+
+		while (true) {
+			try {
+				System.out.print("Ingrese el monto pagado: ");
+				reserva.setMonto_pagado(scanner.nextDouble());
 				break;
 			} catch (InputMismatchException e) {
-				System.out.println("Error: Debe ingresar un número entero para el DNI del cliente.");
+				System.out.println("Error: Debe ingresar un número entero para monto pagado.");
+			} finally {
 				scanner.nextLine();
 			}
 		}
-		Cliente cliente = clienteDao.obtenerClienteId(iid_cli);
-		if (cliente != null) {
-			System.out.print("Ingrese nuevo nombre del cliente: ");
-			String nombre = scanner.nextLine();
-			System.out.print("Ingrese nuevo apellido del cliente: ");
-			String apellido = scanner.nextLine();
-			System.out.print("Ingrese nuevo domicilio del cliente: ");
-			String domicilio = scanner.nextLine();
-			String dni;
-			while (true) {
-				System.out.print("Ingrese nuevo DNI del cliente: ");
-				try {
-						dni  = scanner.nextLine();
-					break;
-				} catch (InputMismatchException e) {
-					System.out.println("Error: Debe ingresar un número entero para el DNI del cliente.");
-					scanner.nextLine();
+
+		reserva.setServiciosAdicionales(ingresarServiciosAdicionales());
+
+		reserva.setPago_adelantado(ingresarPagoAdelantado());
+
+		reserva.setCancelado(false);
+
+		reserva.setEstado(true);
+
+		reservaDao.realizarReserva(reserva);
+
+	}
+
+	public static List<ServiciosAdicionales> ingresarServiciosAdicionales() {
+		List<ServiciosAdicionales> serviciosSeleccionados = new ArrayList<>();
+		while (true) {
+			System.out.println("¿Desea seleccionar servicios adicionales? (S/N): ");
+			switch (scanner.nextLine()) {
+			case "S":
+				Long id_ser;
+				while (true) {
+					try {
+						System.out.print("Seleccione un servicio por su ID ");
+						id_ser = scanner.nextLong();
+						break;
+					} catch (InputMismatchException e) {
+						System.out.println("Error: Debe ingresar un número entero para el ID.");
+					} finally {
+						scanner.nextLine();
+					}
 				}
+
+				ServiciosAdicionales serviciosDisponibles = servAddDao.consultarServicioAdicionalId(id_ser);
+
+				if (serviciosDisponibles != null) {
+					if (!serviciosSeleccionados.contains(serviciosDisponibles)) {
+						serviciosSeleccionados.add(serviciosDisponibles);
+					} else {
+						System.out.println("El servicio ya fue seleccionado.");
+					}
+					break;
+				} else {
+					System.out.println("El servicio no existe.");
+				}
+
+				break;
+
+			case "N":
+				System.out.println("No se seleccionaron servicios adicionales.");
+				return serviciosSeleccionados;
+			default:
+				System.out.println("Opción no válida. No se seleccionarán servicios adicionales.");
 			}
-			System.out.print("Ingrese nuevo Telefono del cliente: ");
-			String telefono = scanner.nextLine();
-			cliente.setDni(dni);
-			cliente.setApellido(apellido);
-			cliente.setDomicilio(domicilio);
-			cliente.setNombre(nombre);
-			cliente.setTelefono(telefono);
-			clienteDao.modificarCliente(cliente);
-			System.out.println("Cliente modificado exitosamente.");
-		} else {
-			System.out.println("Cliente no encontrado.");
 		}
-    }
-    	
 
-    public static void realizarPago() {
-        System.out.println("Función de realizar pago");
-        
-    }
+	}
 
-    public static void realizarReserva() {
-    	Scanner scanner  = new Scanner(System.in);
-        System.out.println("Función de realizar reserva");
-        
-        Cliente cliente;
-        System.out.println("Ingrese id del Cliente :");
-		long idcli = scanner.nextInt();
-		cliente= clienteDao.obtenerClienteId(idcli);
-		if(cliente!=null) {
-			System.out.println("Cliente Existe");
-			
+	public static double ingresarPagoAdelantado() {
+		while (true) {
+			System.out.print("¿Desea ingresar un pago adelantado? (S/N): ");
+			switch (scanner.nextLine()) {
+			case "S":
+				while (true) {
+					try {
+						System.out.print("Ingrese el pago adelantado: ");
+						double pago = scanner.nextDouble();
+						return pago;
+					} catch (InputMismatchException e) {
+						System.out.println("Error: Debe ingresar un número entero para pago adelantado.");
+					} finally {
+						scanner.nextLine();
+					}
+				}
+
+			case "N":
+				System.out.println("No se ingresó un pago adelantado. Se establecerá en 0.0.");
+				break;
+			default:
+				System.out.println("Opción no válida. ");
+			}
 		}
-		else {
-			altaCliente();
-			cliente= clienteDao.obtenerClienteId(idcli);
-			
+
+	}
+
+	public static Cliente buscarUnCliente() {
+		System.out.println("Función de consulta de clientes");
+		while (true) {
+			try {
+				System.out.print("Ingrese el ID del cliente a buscar: ");
+				Long clienteId = scanner.nextLong();
+				return clienteDao.obtenerClienteId(clienteId);
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un número entero para el ID del cliente.");
+			} finally {
+				scanner.nextLine();
+			}
 		}
-		
-		System.out.println("Ingrese salon que desea reservar :");
+
+	}
+
+	public static Reserva buscarUnaReserva() {
+		System.out.println("Función de consultar una reserva");
+		while (true) {
+			try {
+				System.out.print("Ingrese el ID de la reserva:");
+				Long consulta = scanner.nextLong();
+				return reservaDao.consultarReservaId(consulta);
+			} catch (InputMismatchException e) {
+				System.out.println("Error: Debe ingresar un número entero para el ID de la reserva.");
+			} finally {
+				scanner.nextLine();
+			}
+		}
+
+	}
+
+	public static void consultarClientes() {
+		System.out.println("Función de consultar clientes");
+		List<Cliente> clientes = clienteDao.consultarClientes();
+		for (Cliente cliente : clientes) {
+			cliente.mostrarDatos();
+		}
+	}
+
+	public static void consultarSalones() {
+		System.out.println("Función de consultar salones");
 		List<Salon> salones = salonDao.consultarSalones();
-		int x =1;
-		for( Salon salon  : salones) {
-			System.out.println(x + "-"+ salon.getNombre());
-			x=x+1;
+		for (Salon salon : salones) {
+			salon.mostrarDatos();
 		}
-		
-        
-        
-    }
+	}
 
-    public static void consultarTodasLasReservas() {
-        System.out.println("Función de consultar todas las reservas");
-    }
+	public static void consultarServiciosAdicionales() {
+		System.out.println("Función de consultar servicios adicionales");
+		List<ServiciosAdicionales> adicionales = servAddDao.consultarServicioAdicional();
+		for (ServiciosAdicionales serviciosAdicionales : adicionales) {
+			serviciosAdicionales.mostrarDatos();
+		}
+	}
 
-    public static void consultarUnaReserva() {
-        System.out.println("Función de consultar una reserva");
-    }
+	public static void consultarTodasLasReservas() {
+		System.out.println("Función de consultar todas las reservas");
+		List<Reserva> reservas = reservaDao.consultarReservas();
+		for (Reserva reserva : reservas) {
+			reserva.mostrarDatos();
+		}
+	}
 
-    public static void consultarSalones() {
-    	Scanner scanner  = new Scanner(System.in);
-    	System.out.println("Función de consultar salones");
-    	System.out.println("Ingrese id de salon a consultar");
-    	long idconsultar = scanner.nextLong();
-    	List<Salon> salones = salonDao.consultarSalones();
-    	for (Salon salon : salones) {
-    		if(salon.getId()== idconsultar) {
-    			System.out.println("Cliente existente");
-    			salon.mostrarDatos();
-    			break;
-    		}
-    		else {
-    			System.out.println("El cliente no existe ");
-    		}
-    	}
-    }
+	public static void precargaSalon() {
+		salonDao.guardarSalon(new Salon("Salón Cosmos", 60, false, 60000.00));
+		salonDao.guardarSalon(new Salon("Salón Esmeralda", 20, false, 40000.00));
+		salonDao.guardarSalon(new Salon("Salón Galaxy", 100, true, 60000.00));
+	}
 
-    public static void consultarServiciosAdicionales() {
-        System.out.println("Función de consultar servicios adicionales");
-    }
+	public static void precargaServiciosAdicionales() {
+		servAddDao.guardarServicioAdicional(new ServiciosAdicionales("Cámara 360", 1500.00, true));
+		servAddDao.guardarServicioAdicional(new ServiciosAdicionales("Cabina de fotos", 2000.00, true));
+		servAddDao.guardarServicioAdicional(new ServiciosAdicionales("Filmación", 3000.00, true));
+		servAddDao.guardarServicioAdicional(new ServiciosAdicionales("Pintacaritas", 500.00, true));
+	}
 }

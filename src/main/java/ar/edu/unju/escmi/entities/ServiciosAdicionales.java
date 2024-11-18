@@ -1,6 +1,6 @@
 package ar.edu.unju.escmi.entities;
 
-import java.util.List;
+import java.util.List; 
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

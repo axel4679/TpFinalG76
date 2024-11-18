@@ -1,5 +1,5 @@
 package ar.edu.unju.escmi.dao.imp;
-
+ 
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -36,5 +36,13 @@ public class SalonDaoImp implements ISalonDao {
 		List<Salon> salones = query.getResultList();
 		return salones;
 	}
+
+	@Override
+	public Salon obtenerSalonId(Long idcliente) {
+		return manager.find(Salon.class, idcliente);
+	}
+	
+	
+	
 
 }

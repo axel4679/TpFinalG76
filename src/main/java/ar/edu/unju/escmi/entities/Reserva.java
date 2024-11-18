@@ -1,5 +1,5 @@
 package ar.edu.unju.escmi.entities;
-
+ 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -169,17 +169,9 @@ public class Reserva {
 	}
 
 	public double calcularCostoHorarioExtendido() {
-		// Hora máxima de reserva estándar (por ejemplo, 22:00)
-		LocalTime horaMaxima = LocalTime.of(23, 0);
-
-		// Si la hora de fin está después de la hora máxima, calcular las horas
-		// adicionales
-		if (hs_fin.isAfter(horaMaxima)) {
-			Duration duracionExtra = Duration.between(horaMaxima, hs_fin);
-			long horasExtras = duracionExtra.toHours();
-			return horasExtras * 10000; // $10,000 por cada hora extra
-		}
-		return 0;
+	    Duration duracionExtra = Duration.between(hs_inicio, hs_fin);
+	    long horasExtras = duracionExtra.toHours(); 
+	    return horasExtras * 10000;
 	}
 
 	public double calcularMontoTotal() {
@@ -187,25 +179,28 @@ public class Reserva {
 		for (ServiciosAdicionales servicioAdicional : this.serviciosAdicionales) {
 			total = total + servicioAdicional.getPrecio();
 		}
-		return total + calcularCostoHorarioExtendido();
+		return total + calcularCostoHorarioExtendido() + this.salon.getPrecio();
 	}
 
 	public double calcularPagoPendiente() {
-		return calcularMontoTotal() - this.monto_pagado;
+		return calcularMontoTotal() - this.monto_pagado - this.pago_adelantado;
 	}
 
 	public void mostrarDatos() {
 		System.out.println("ID: " + this.id);		
-		System.out.println("Cliente: " + this.cliente);
-		System.out.println("Salón: " + this.salon);
+		System.out.println("Cliente: " + this.cliente.getNombre());
+		System.out.println("Salón: " + this.salon.getNombre());
 		System.out.println("Fecha: " + this.fecha);
 		System.out.println("Hora de Inicio: " + this.hs_inicio);
 		System.out.println("Hora de Fin: " + this.hs_fin);
-		System.out.println("Monto Pagado: " + this.monto_pagado);
-		//System.out.println("Servicios Adicionales: " + this.serviciosAdicionales.);
-		System.out.println("Pago Adelantado: " + this.pago_adelantado);
-		System.out.println("Cancelado: " + this.cancelado);
+		System.out.println("Servicios Adicionales: " );
+		for(ServiciosAdicionales serviciosAdicionales : this.serviciosAdicionales) {
+			System.out.println(serviciosAdicionales.getDescripcion());
+		}
+		System.out.println("Cancelado: " + (cancelado ? "CANCELADO" : "PAGO PENDIENTE"));
 		System.out.println("Estado: " + this.estado);
+		System.out.println("Monto Pagado: " + this.monto_pagado);
+		System.out.println("Pago Adelantado: " + this.pago_adelantado);
 	}
 
 }
