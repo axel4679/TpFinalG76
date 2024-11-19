@@ -1,5 +1,6 @@
 package ar.edu.unju.escmi.entities;
- 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,34 +12,38 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import ar.edu.unju.escmi.dao.imp.SalonDaoImp;
-
 @Entity
-@Table(name = "Salones")
+@Table(name = "salones")
 public class Salon {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "salon_id")
 	private long id;
-	@Column(nullable = false, length = 50,unique = true)
+	
+	@Column(name = "salon_nombre")
 	private String nombre;
-	@Column(length = 3)
+	
+	@Column(name = "salon_capacidad")
 	private int capacidad;
-	@Column(nullable = false)
-	private boolean pileta;
-	@Column(nullable = false)
+	
+	@Column(name = "salon_con_pileta")
+	private boolean conPileta = false;
+	
+	@Column(name = "salon_precio", nullable = false)
 	private double precio;
+	
 	@OneToMany(mappedBy = "salon", cascade = CascadeType.ALL)
-	private List<Reserva> reservas;
-
+	private List<Reserva> reservas = new ArrayList<>();
+	
 	public Salon() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public Salon(String nombre, int capacidad, boolean pileta, double precio) {
+	public Salon(String nombre, int capacidad, boolean conPileta , double precio) {
 		super();
 		this.nombre = nombre;
 		this.capacidad = capacidad;
-		this.pileta = pileta;
+		this.conPileta = conPileta; 
 		this.precio = precio;
 	}
 
@@ -66,12 +71,12 @@ public class Salon {
 		this.capacidad = capacidad;
 	}
 
-	public boolean isPileta() {
-		return pileta;
+	public boolean isConPileta() {
+		return conPileta;
 	}
 
-	public void setPileta(boolean pileta) {
-		this.pileta = pileta;
+	public void setConPileta(boolean conPileta) {
+		this.conPileta = conPileta;
 	}
 
 	public double getPrecio() {
@@ -82,14 +87,24 @@ public class Salon {
 		this.precio = precio;
 	}
 
-	public void mostrarDatos() {
-
-		System.out.println("Id: " + this.id);
-		System.out.println("Nombre: " + this.nombre);
-		System.out.println("Capacidad: " + this.capacidad);
-		System.out.println("Con pileta: " + (this.pileta ? "SI" : "NO"));
-		System.out.println("Precio: " + this.precio);
-
+	public List<Reserva> getReservas() {
+		return reservas;
 	}
-	
+
+	public void setReservas(Reserva reserva) {
+		reservas.add(reserva);
+	}
+
+	public void mostrarDatos() {
+		System.out.println("\nSalon: " + id);
+		System.out.println("Nombre del salon: " + nombre);
+		System.out.println("Capacidad: " + capacidad);
+		if(conPileta == false) {
+			System.out.println("Pileta: No"); 	
+		}
+		else {
+			System.out.println("Pileta: Si");
+		}
+		System.out.println("Precio: $" + precio);
+	}
 }

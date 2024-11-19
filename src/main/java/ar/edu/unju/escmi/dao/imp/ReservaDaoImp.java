@@ -1,11 +1,11 @@
 package ar.edu.unju.escmi.dao.imp;
- 
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 
-import ar.edu.unju.escmi.conf.EmfSingleton;
+import ar.edu.unju.escmi.config.EmfSingleton;
 import ar.edu.unju.escmi.dao.IReservaDao;
 import ar.edu.unju.escmi.entities.Reserva;
 
@@ -13,31 +13,31 @@ public class ReservaDaoImp implements IReservaDao {
 	private static EntityManager manager = EmfSingleton.getInstance().getEmf().createEntityManager();
 
 	@Override
-	public void realizarReserva(Reserva reserva) {
+	public void guardarReserva(Reserva reserva) {
 		try {
 			manager.getTransaction().begin();
-			manager.persist(reserva);
+			manager.merge(reserva);
 			manager.getTransaction().commit();
 		} catch (Exception e) {
-			if (manager.getTransaction() != null) {
+			if (manager.getTransaction()!=null) {
 				manager.getTransaction().rollback();
 			}
-			System.out.println("No se pudo guardar el objeto Salon");
-		} finally {
-			// manager.close();
+			System.out.println("No se pudo guardar la reserva");
 		}
 	}
 
 	@Override
-	public List<Reserva> consultarReservas() {
-		TypedQuery<Reserva> query = manager.createQuery("Select l from Reserva l", Reserva.class);
+	public void mostrarTodosLasReservas() {
+		Query query = manager.createQuery("SELECT e FROM Reserva e",Reserva.class);
+		@SuppressWarnings("unchecked")
 		List<Reserva> reservas = query.getResultList();
-		return reservas;
+		for(Reserva reserva : reservas) {
+			reserva.mostrarDatos();
+		}
 	}
 
 	@Override
-	public Reserva consultarReservaId(Long idcliente) {
-		return manager.find(Reserva.class, idcliente);
+	public Reserva consultarReserva(long idReserva) {
+		return manager.find(Reserva.class, idReserva);
 	}
-
 }

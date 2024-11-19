@@ -1,11 +1,11 @@
 package ar.edu.unju.escmi.dao.imp;
- 
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 
-import ar.edu.unju.escmi.conf.EmfSingleton;
+import ar.edu.unju.escmi.config.EmfSingleton;
 import ar.edu.unju.escmi.dao.IClienteDao;
 import ar.edu.unju.escmi.entities.Cliente;
 
@@ -13,21 +13,17 @@ public class ClienteDaoImp implements IClienteDao {
 	private static EntityManager manager = EmfSingleton.getInstance().getEmf().createEntityManager();
 
 	@Override
-	public void altaCliente(Cliente cliente) {
+	public void guardarCliente(Cliente cliente) {
 		try {
 			manager.getTransaction().begin();
-			manager.persist(cliente);
+			manager.merge(cliente);
 			manager.getTransaction().commit();
-
 		} catch (Exception e) {
-			if (manager.getTransaction() != null) {
+			if (manager.getTransaction()!=null) {
 				manager.getTransaction().rollback();
 			}
-			System.out.println("No se pudo guardar el objeto cliente");
-		} finally {
-			//manager.close();
+			System.out.println("No se pudo guardar el cliente");
 		}
-
 	}
 
 	@Override
@@ -37,26 +33,25 @@ public class ClienteDaoImp implements IClienteDao {
 			manager.merge(cliente);
 			manager.getTransaction().commit();
 		} catch (Exception e) {
-			if (manager.getTransaction() != null) {
+			if (manager.getTransaction()!=null) {
 				manager.getTransaction().rollback();
 			}
-			System.out.println("No se pudo modificar el cliente");
-		} finally {
-			// manager.close();
+			System.out.println("No se pudo modificar los datos del cliente");
 		}
-
 	}
 
 	@Override
-	public List<Cliente> consultarClientes() {
-		TypedQuery<Cliente> query = manager.createQuery("Select l from Cliente l", Cliente.class);
+	public void mostrarTodosLosClientes() {
+		Query query = manager.createQuery("SELECT e FROM Cliente e",Cliente.class);
+		@SuppressWarnings("unchecked")
 		List<Cliente> clientes = query.getResultList();
-		return clientes;
+		for(Cliente cliente : clientes) {
+			cliente.mostrarCliente();
+		}
 	}
 
 	@Override
-	public Cliente obtenerClienteId(Long idcliente) {
-		return manager.find(Cliente.class, idcliente);
+	public Cliente consultarCliente(long idCliente) {
+		return manager.find(Cliente.class, idCliente);
 	}
-
 }

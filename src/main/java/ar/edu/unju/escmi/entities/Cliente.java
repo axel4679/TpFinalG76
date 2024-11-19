@@ -1,5 +1,6 @@
 package ar.edu.unju.escmi.entities;
- 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,38 +13,44 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Clientes")
+@Table(name = "clientes")
 public class Cliente {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cliente_id")
 	private long id;
-	@Column(nullable = false, unique = true, length = 20)
-	private String dni;
-	@Column(nullable = false, length = 50)
+	
+	@Column(name = "cliente_dni", nullable = false)
+	private int dni;
+	
+	@Column(name = "cliente_nombre")
 	private String nombre;
-	@Column(nullable = false, length = 50)
+	
+	@Column(name = "cliente_apellido")
 	private String apellido;
-	@Column(length = 100)
-	private String domicilio;
-	@Column(length = 15)
-	private String telefono;
-	@Column(nullable = false)
-	private boolean estado;
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-	private List<Reserva> reservas;
-	public Cliente() {
-		// TODO Auto-generated constructor stub
-	}
 
-	public Cliente(String dni, String nombre, String apellido, String domicilio, String telefono, boolean estado) {
+	@Column(name = "cliente_domicilio")
+	private String domicilio;
+	
+	@Column(name= "cliente_telefono", nullable = false)
+	private String telefono;
+	
+	@Column(name = "cliente_estado")
+	private boolean estado = true;
+	
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+	private List<Reserva> reservas = new ArrayList<>();
+
+	public Cliente() {
+	}
+	
+	public Cliente(int dni, String nombre, String apellido, String domicilio, String telefono) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.domicilio = domicilio;
 		this.telefono = telefono;
-		this.estado = estado;
 	}
 
 	public long getId() {
@@ -54,11 +61,11 @@ public class Cliente {
 		this.id = id;
 	}
 
-	public String getDni() {
+	public int getDni() {
 		return dni;
 	}
 
-	public void setDni(String dni) {
+	public void setDni(int dni) {
 		this.dni = dni;
 	}
 
@@ -101,15 +108,20 @@ public class Cliente {
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
-
-	public void mostrarDatos() {
-		System.out.println("Id: " + this.id);
-		System.out.println("Nombre: " + this.nombre);
-		System.out.println("Apellido: " + this.apellido);
-		System.out.println("DNI: " + this.dni);
-		System.out.println("Domicilio: " + this.domicilio);
-		System.out.println("Teléfono: " + this.telefono);
-		System.out.println("Estado: " + (this.estado ? "Activo" : "Inactivo"));
+	
+	public List<Reserva> getReservas() {
+		return reservas;
 	}
 
+	public void setReservas(Reserva reserva) {
+		reservas.add(reserva);
+	}
+
+	public void mostrarCliente() {
+		System.out.println("\nCliente: " + id);
+		System.out.println("Nombre del cliente: " + apellido + ", " + nombre);
+		System.out.println("DNI: " + dni);
+		System.out.println("Domicilio: " + domicilio);
+		System.out.println("Telefono: " + telefono);
+	}
 }
